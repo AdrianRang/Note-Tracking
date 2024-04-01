@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Climbers.ClimbersDown;
 import frc.robot.commands.Climbers.ClimbersUp;
 import frc.robot.commands.Intake.IntakeIn;
@@ -109,6 +108,7 @@ public class RobotContainer {
     }});
  
     // Add commands to SmartDashboard
+    SmartDashboard.putData("ActiveTrackPID", Constants.SwerveDrive.kActiveTrackPIDController);
     SmartDashboard.putData("ZeroHeading", new InstantCommand(() -> m_swerveDrive.zeroHeading()));
     SmartDashboard.putData("ResetPose", new InstantCommand(() -> m_swerveDrive.resetPose()));
     SmartDashboard.putData("SetVisionPose", new InstantCommand(() -> m_swerveDrive.setVisionPose()));
@@ -129,7 +129,8 @@ public class RobotContainer {
         () -> -this.m_driverControllerCustom.getLeftY(),
         () -> -this.m_driverControllerCustom.getLeftX(),
         () -> -this.m_driverControllerCustom.getRightX(),
-        () -> !this.m_driverControllerCustom.topButton().getAsBoolean()
+        () -> true,
+        () -> this.m_driverControllerCustom.topButton().getAsBoolean()
       )
     );
 

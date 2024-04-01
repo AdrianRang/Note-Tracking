@@ -71,7 +71,7 @@ public class SwerveDrive extends SubsystemBase {
             },
             Constants.Field.kInitialPoseMeters,
             Constants.SwerveDrive.kEncoderStdDev,
-            Constants.SwerveDrive.kVisioStdDev
+            Constants.SwerveDrive.kVisionStdDev
         );
         
         // Reset gyro

@@ -5,6 +5,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,6 +21,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import lib.team3526.constants.CTRECANDevice;
 import lib.team3526.constants.PIDFConstants;
 import lib.team3526.constants.SwerveModuleOptions;
@@ -39,10 +41,13 @@ public final class Constants {
     public static final class SwerveDrive {
         public static final CTRECANDevice kGyroDevice = new CTRECANDevice(34, "*");
 
+        // Active track pid constants
+        public static final PIDController kActiveTrackPIDController = new PIDController(0.015, 0.002, 0);
+
         // Visiom odometry
         public static final boolean kUseVisionOdometry = true;
         public static final Matrix<N3, N1> kEncoderStdDev = VecBuilder.fill(0, 0, 0);
-        public static final Matrix<N3, N1> kVisioStdDev = VecBuilder.fill(0, 0, 0);
+        public static final Matrix<N3, N1> kVisionStdDev = VecBuilder.fill(0, 0, 0);
 
         // Active track pid constants
         public static final double kActiveTrackP = 0.01;
@@ -53,7 +58,7 @@ public final class Constants {
         //! Physical model of the robot
         public static final class PhysicalModel {
             //! MAX DISPLACEMENT SPEED (and acceleration)
-            public static final Measure<Velocity<Distance>> kMaxSpeed = MetersPerSecond.of(4.5);
+            public static final Measure<Velocity<Distance>> kMaxSpeed = MetersPerSecond.of(5);
             public static final double kMaxAcceleration = 3;
 
             //! MAX ROTATIONAL SPEED (and acceleration)
@@ -142,6 +147,8 @@ public final class Constants {
     //! FIELD
     public static final class Field {
         public static final Pose2d kInitialPoseMeters = new Pose2d(new Translation2d(1, 2), new Rotation2d(0, 0));
+        public static final Pose2d kBlueSpeakerPoseMeters = new Pose2d(new Translation2d(0, 5.55), Rotation2d.fromDegrees(0));
+        public static final Pose2d kRedSpeakerPoseMeters = new Pose2d(new Translation2d(17, 5.55), Rotation2d.fromDegrees(0));
     }
 
     //! VISION
@@ -222,6 +229,9 @@ public final class Constants {
 
         // Shooter motor time
         public static final double kMaxShootTime = 4;
+
+        // Shooter angle
+        public static final Rotation2d kRobotAngle = Rotation2d.fromDegrees(0);
     }
 
     //! CLIMBER
