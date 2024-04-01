@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.75,
+      "y": 4.4
+    },
+    "rotation": -60.65508265794031
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LifterFloor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right.RightNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightNote.Right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LifterFloor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right.MiddleNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MiddleNote.Speaker"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Right",
+  "choreoAuto": false
+}

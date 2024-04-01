@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.5,
+        "y": 3.93
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.4602720114540666,
+        "y": 4.030018241858788
+      },
+      "isLocked": false,
+      "linkedName": "RightNote"
+    },
+    {
+      "anchor": {
+        "x": 0.75,
+        "y": 4.4
+      },
+      "prevControl": {
+        "x": 0.9658484771524527,
+        "y": 3.964717020347254
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Right"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.23210693805215,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Notes.Right",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
