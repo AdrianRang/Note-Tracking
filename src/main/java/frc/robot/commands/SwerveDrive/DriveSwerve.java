@@ -28,6 +28,10 @@ public class DriveSwerve extends Command {
   Supplier<Boolean> trackingSpeaker;
 
   PIDController rotController = Constants.SwerveDrive.kActiveTrackPIDController;
+  PIDController headingController = Constants.SwerveDrive.kHeadingController;
+
+  double targetHeading = 0;
+  boolean stoppedRotating = false;
   
   public DriveSwerve(SwerveDrive swerveDrive, Supplier<Double> xSpeed, Supplier<Double> ySpeed, Supplier<Double> rotSpeed, Supplier<Boolean> fieldRelative, Supplier<Boolean> trackingSpeaker) {
     this.swerveDrive = swerveDrive;
@@ -55,11 +59,23 @@ public class DriveSwerve extends Command {
         (isBlueAlliance ? Constants.Field.kBlueSpeakerPoseMeters.getX() : Constants.Field.kRedSpeakerPoseMeters.getX()) - swerveDrive.getPose().getTranslation().getX()
       ) + Math.PI).rotateBy(Constants.Shooter.kRobotAngle);
       rot = rotController.calculate(swerveDrive.getHeading().getDegrees(), targetAngle.getDegrees());
-    } else rot = rotSpeed.get();
+    } else {
+      rot = rotSpeed.get();
+      if (rot < Constants.SwerveDrive.kJoystickDeadband) {
+        if (!stoppedRotating) {
+          targetHeading = swerveDrive.getHeading().getDegrees();
+          stoppedRotating = true;
+        }
+        rot = headingController.calculate(swerveDrive.getHeading().getDegrees(), targetHeading);
+      } else {
+        stoppedRotating = false;
+      }
+    }
 
     x = Math.abs(x) < Constants.SwerveDrive.kJoystickDeadband ? 0 : x;
     y = Math.abs(y) < Constants.SwerveDrive.kJoystickDeadband ? 0 : y;
-    rot = Math.abs(rot) < Constants.SwerveDrive.kJoystickDeadband ? 0 : rot;
+    // Rotation deadband is applied above as heading controller is appliad if no deadband
+    // rot = Math.abs(rot) < Constants.SwerveDrive.kJoystickDeadband ? 0 : rot;
     
     x = xLimiter.calculate(x);
     y = yLimiter.calculate(y);

@@ -21,7 +21,6 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import lib.team3526.constants.CTRECANDevice;
 import lib.team3526.constants.PIDFConstants;
 import lib.team3526.constants.SwerveModuleOptions;
@@ -43,6 +42,9 @@ public final class Constants {
 
         // Active track pid constants
         public static final PIDController kActiveTrackPIDController = new PIDController(0.015, 0.0025, 0);
+
+        // Rotation lock PIDF Constants
+        public static final PIDController kHeadingController = new PIDController(0.01, 0.0, 0.0);
 
         // Visiom odometry
         public static final boolean kUseVisionOdometry = true;
@@ -86,9 +88,6 @@ public final class Constants {
     
             // Create a kinematics instance with the positions of the swerve modules
             public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(SwerveChassis.sizeToModulePositions(kTrackWidth.in(Meters), kWheelBase.in(Meters)));
-
-            // Rotation lock PIDF Constants
-            public static final PIDFConstants kHeadingControllerPIDConstants = new PIDFConstants(0.1, 0.0, 0.0);
 
             // Rotational inertia constants
             public static final double kRobotMassKg = 46;

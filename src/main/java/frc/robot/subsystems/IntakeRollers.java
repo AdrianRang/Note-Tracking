@@ -88,4 +88,13 @@ public class IntakeRollers extends SubsystemBase {
     public boolean hasPiece() {
         return !this.limitSwitch.get();
     }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putBoolean("Intake/HasPiece", this.hasPiece());
+        SmartDashboard.putBoolean("Intake/Intaking", this.isIntaking);
+        SmartDashboard.putNumber("Intake/Speed", this.getRollersSpeed());
+        SmartDashboard.putNumber("Intake/SetSpeed", this.setRollerSpeed);
+    }
 }
+// gustavo te amo

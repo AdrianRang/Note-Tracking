@@ -110,6 +110,7 @@ public class RobotContainer {
  
     // Add data to SmartDashboard
     SmartDashboard.putData("ActiveTrackPID", Constants.SwerveDrive.kActiveTrackPIDController);
+    SmartDashboard.putData("HeadingControllerPID", Constants.SwerveDrive.kHeadingController);
     SmartDashboard.putData("ZeroHeading", new InstantCommand(() -> m_swerveDrive.zeroHeading()));
     SmartDashboard.putData("ResetPose", new InstantCommand(() -> m_swerveDrive.resetPose()));
     SmartDashboard.putData("SetVisionPose", new InstantCommand(() -> m_swerveDrive.setVisionPose()));
