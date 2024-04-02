@@ -42,7 +42,7 @@ public final class Constants {
         public static final CTRECANDevice kGyroDevice = new CTRECANDevice(34, "*");
 
         // Active track pid constants
-        public static final PIDController kActiveTrackPIDController = new PIDController(0.015, 0.002, 0);
+        public static final PIDController kActiveTrackPIDController = new PIDController(0.015, 0.0025, 0);
 
         // Visiom odometry
         public static final boolean kUseVisionOdometry = true;
@@ -211,7 +211,7 @@ public final class Constants {
             public static final Measure<Angle> kShooterAngle = Radians.of(0);
             public static final Measure<Angle> kAmplifierPrevAngle = Degrees.of(40);
             public static final Measure<Angle> kAmplifierFinalAngle = Degrees.of(85);
-            public static final Measure<Angle> kGroundAngle = Degrees.of(176);
+            public static final Measure<Angle> kGroundAngle = Degrees.of(177);
         }
     }
 

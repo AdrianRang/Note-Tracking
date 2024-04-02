@@ -9,6 +9,7 @@ import java.util.HashMap;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -107,12 +108,15 @@ public class RobotContainer {
       put("PickUpPiece", new RunForCommand(new PickUpPiece(m_rollers, m_intake, m_leds), 5));
     }});
  
-    // Add commands to SmartDashboard
+    // Add data to SmartDashboard
     SmartDashboard.putData("ActiveTrackPID", Constants.SwerveDrive.kActiveTrackPIDController);
     SmartDashboard.putData("ZeroHeading", new InstantCommand(() -> m_swerveDrive.zeroHeading()));
     SmartDashboard.putData("ResetPose", new InstantCommand(() -> m_swerveDrive.resetPose()));
     SmartDashboard.putData("SetVisionPose", new InstantCommand(() -> m_swerveDrive.setVisionPose()));
     SmartDashboard.putData("ResetTurningEncoders", new InstantCommand(() -> m_swerveDrive.resetTurningEncoders()));
+
+    // Start camera server
+    CameraServer.startAutomaticCapture();
 
     // Autonomous chooser
     this.autonomousChooser = AutoBuilder.buildAutoChooser();
