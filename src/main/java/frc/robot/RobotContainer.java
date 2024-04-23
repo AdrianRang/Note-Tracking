@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import java.util.HashMap;
@@ -16,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.Climbers.ClimbersDown;
+import frc.robot.commands.Climbers.ClimbersFullyDown;
 import frc.robot.commands.Climbers.ClimbersUp;
 import frc.robot.commands.Intake.IntakeIn;
 import frc.robot.commands.Intake.IntakeOut;
@@ -38,6 +35,9 @@ import frc.robot.subsystems.Gyro.Gyro;
 import frc.robot.subsystems.Gyro.GyroIOPigeon;
 import lib.team3526.commands.RunForCommand;
 import lib.team3526.driveControl.CustomController;
+import lib.team3526.led.animations.PhaseAnimation;
+import lib.team3526.led.framework.HyperAddressableLEDSegment;
+import lib.team3526.led.framework.HyperAddressableLEDStrip;
 
 public class RobotContainer {
   // * Controller
@@ -68,6 +68,9 @@ public class RobotContainer {
 
   // * LEDs
   private final LedsSubsystem m_leds;
+  public static final HyperAddressableLEDSegment shooterLeds = new HyperAddressableLEDSegment(10);
+  public static final HyperAddressableLEDStrip m_ledStrip = new HyperAddressableLEDStrip(0, shooterLeds);
+
 
   // * Autonomous Chooser
   SendableChooser<Command> autonomousChooser;
@@ -95,6 +98,10 @@ public class RobotContainer {
     this.m_leds = new LedsSubsystem(Constants.CANdle.kCANdle);
     this.m_leds.turnOff();
 
+    RobotContainer.shooterLeds.setDefaultAnimation(new PhaseAnimation(0, 0, 255, 1)::provider);
+    RobotContainer.m_ledStrip.leds.setBitTiming(250, 600, 600, 300);
+    RobotContainer.m_ledStrip.leds.setSyncTime(300);
+
     // Register the named commands for autonomous
     NamedCommands.registerCommands(new HashMap<String, Command>() {{
       put("IntakeIn", new RunForCommand(new IntakeIn(m_rollers), 1));
@@ -106,6 +113,10 @@ public class RobotContainer {
       put("LifterShooter", new RunForCommand(new LifterShooter(m_intake), 1));
 
       put("PickUpPiece", new RunForCommand(new PickUpPiece(m_rollers, m_intake, m_leds), 5));
+
+      put("ClimbersFullyDown", new RunForCommand(new ClimbersFullyDown(m_leftClimber, m_rightClimber), 5));
+
+      put("AutoAim", new RunForCommand(new DriveSwerve(m_swerveDrive, () -> 0.0, () -> 0.0, () -> 0.0, () -> true, () -> true), 2));
     }});
  
     // Add data to SmartDashboard
@@ -115,6 +126,7 @@ public class RobotContainer {
     SmartDashboard.putData("ResetPose", new InstantCommand(() -> m_swerveDrive.resetPose()));
     SmartDashboard.putData("SetVisionPose", new InstantCommand(() -> m_swerveDrive.setVisionPose()));
     SmartDashboard.putData("ResetTurningEncoders", new InstantCommand(() -> m_swerveDrive.resetTurningEncoders()));
+    SmartDashboard.putData("Reset Climbers", new RunForCommand(new ClimbersFullyDown(m_leftClimber, m_rightClimber), 5));
 
     // Start camera server
     CameraServer.startAutomaticCapture();
@@ -135,12 +147,13 @@ public class RobotContainer {
         () -> -this.m_driverControllerCustom.getLeftX(),
         () -> -this.m_driverControllerCustom.getRightX(),
         () -> true,
-        () -> this.m_driverControllerCustom.topButton().getAsBoolean()
+        () -> this.m_driverControllerCustom.rightTrigger().getAsBoolean()
       )
     );
 
     this.m_driverControllerCustom.bottomButton().toggleOnTrue(new PickUpPiece(this.m_rollers, this.m_intake, this.m_leds));
 
+    // Set pipeline to apriltags high framerate
     this.m_driverControllerCustom.rightTrigger().whileTrue(new SpinShooter(this.m_shooter, this.m_leds));
     this.m_driverControllerCustom.rightTrigger().onFalse(new Shoot(this.m_shooter, this.m_rollers, this.m_leds));
 
@@ -160,10 +173,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return this.autonomousChooser.getSelected();
-    // return new SequentialCommandGroup(
-    //   new InstantCommand(() -> m_swerveDrive.resetTurningEncoders()),
-    //   this.autonomousChooser.getSelected()
-    // );
   }
 
   public Command getTeleopInitCommand() {

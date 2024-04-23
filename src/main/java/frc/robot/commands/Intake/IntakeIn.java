@@ -15,6 +15,7 @@ public class IntakeIn extends Command {
   
   @Override
   public void initialize() {
+
   }
   
   @Override
@@ -24,7 +25,7 @@ public class IntakeIn extends Command {
   
   @Override
   public void end(boolean interrupted) {
-    LimelightLED.blinkLeds(Constants.Vision.kLimelightName);
+    if (rollers.hasPiece()) LimelightLED.blinkLeds(Constants.Vision.kLimelightName);
     rollers.stop();
   }
   

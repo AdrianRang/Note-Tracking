@@ -25,6 +25,9 @@ import lib.team3526.constants.CTRECANDevice;
 import lib.team3526.constants.PIDFConstants;
 import lib.team3526.constants.SwerveModuleOptions;
 import lib.team3526.led.LEDStrip;
+import lib.team3526.led.animations.PhaseAnimation;
+import lib.team3526.led.animations.ShootingStarAnimation;
+import lib.team3526.led.framework.HyperLEDAnimation;
 import lib.team3526.utils.SwerveChassis;
 
 import static edu.wpi.first.units.Units.*;
@@ -42,6 +45,7 @@ public final class Constants {
 
         // Active track pid constants
         public static final PIDController kActiveTrackPIDController = new PIDController(0.015, 0.0025, 0);
+        public static final boolean kActiveTrackUseAprilTags = true;
 
         // Rotation lock PIDF Constants
         public static final PIDController kHeadingController = new PIDController(0.01, 0.0, 0.0);
@@ -60,7 +64,7 @@ public final class Constants {
         //! Physical model of the robot
         public static final class PhysicalModel {
             //! MAX DISPLACEMENT SPEED (and acceleration)
-            public static final Measure<Velocity<Distance>> kMaxSpeed = MetersPerSecond.of(5);
+            public static final Measure<Velocity<Distance>> kMaxSpeed = MetersPerSecond.of(4);
             public static final double kMaxAcceleration = 3;
 
             //! MAX ROTATIONAL SPEED (and acceleration)
@@ -156,6 +160,8 @@ public final class Constants {
         public static final String kLimelightName = "limelight";
         public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         public static final Transform3d kCameraPose = new Transform3d(new Translation3d(0.5, 0.5, 0.3), new Rotation3d(0, -2, 0));
+        public static final int kOdometryPipeline = 0;
+        public static final int kActiveTrackPipeline = 1;
     }
 
     //* INTAKE
@@ -200,8 +206,8 @@ public final class Constants {
         // Lifter motor config
         public static final int kLifterMotorID = 37;
         public static final ArmFeedforward kLifterFeedforward = new ArmFeedforward(0.0, 0, 0.0);
-        public static final Constraints kLifterConstraints = new Constraints(38, 40);
-        public static final ProfiledPIDController kLifterPIDController = new ProfiledPIDController(2.8, 0.0, 0.0, kLifterConstraints);
+        public static final Constraints kLifterConstraints = new Constraints(42, 38);
+        public static final ProfiledPIDController kLifterPIDController = new ProfiledPIDController(3.15, 0.0, 0.0, kLifterConstraints);
 
         public static final class Physical {
             public static final Measure<Angle> kLifterMaxHeight = Radians.of((37/36)*Math.PI);
@@ -210,7 +216,7 @@ public final class Constants {
             public static final Measure<Angle> kShooterAngle = Radians.of(0);
             public static final Measure<Angle> kAmplifierPrevAngle = Degrees.of(40);
             public static final Measure<Angle> kAmplifierFinalAngle = Degrees.of(85);
-            public static final Measure<Angle> kGroundAngle = Degrees.of(177);
+            public static final Measure<Angle> kGroundAngle = Degrees.of(176);
         }
     }
 
@@ -221,7 +227,7 @@ public final class Constants {
         public static final int kRightShooterMotorID = 31;
 
         // Shooter motor rpm conversion
-        public static final double kShooterGearRatio = 1.0/1.0;
+        public static final double kShooterGearRatio = 1.0 / 1.0;
 
         // Shooter speeds
         public static final double kShooterSpeakerSpeed = 1;
@@ -230,7 +236,7 @@ public final class Constants {
         public static final double kMaxShootTime = 4;
 
         // Shooter angle
-        public static final Rotation2d kRobotAngle = Rotation2d.fromDegrees(0);
+        public static final Rotation2d kRobotAngle = Rotation2d.fromDegrees(180);
     }
 
     //! CLIMBER
@@ -248,7 +254,7 @@ public final class Constants {
         public static final double kClimber_RotationToCentimeters = 1 / 16 / 3 * 31;
 
         // Max current (Used for reseting the climber)
-        public static final double kFullDeextensionCurrentThreshold = 35;
+        public static final double kMaxCurrent = 20;
 
         // Climber encoder
         public static final double kLedExtensionThreshold = 1;
@@ -262,9 +268,14 @@ public final class Constants {
 
 
         public static final LEDStripType kLEDStripType = LEDStripType.GRB;
-        public static final double kLEDBrightness = 1;
+        public static final double kLEDBrightness = 0.25;
 
         public static final LEDStrip kLeftClimber = new LEDStrip(0, 9);
         public static final LEDStrip kRightClimber = new LEDStrip(9, 18);
+    }
+
+    public static final class HyperLEDs {
+        public static final HyperLEDAnimation kDefaultAnimation = new PhaseAnimation(0, 0, 255, 1);
+        public static final HyperLEDAnimation kShootAnimation = new ShootingStarAnimation(120, 100, 100, 1, 0.5);
     }
 }

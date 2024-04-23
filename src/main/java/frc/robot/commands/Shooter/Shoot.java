@@ -2,6 +2,8 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeRollers;
 import frc.robot.subsystems.LedsSubsystem;
 import frc.robot.subsystems.Shooter;
@@ -24,8 +26,9 @@ public class Shoot extends Command {
     this.timer.reset();
     this.timer.start();
     this.leds.setLeds("#0000ff");
+    RobotContainer.shooterLeds.setAnimation(Constants.HyperLEDs.kShootAnimation::provider);
   }
-
+  
   @Override
   public void execute() {
     this.shooter.shootSpeaker();
@@ -38,6 +41,7 @@ public class Shoot extends Command {
     this.rollers.stop();
     this.timer.stop();
     this.leds.turnOff();
+    RobotContainer.shooterLeds.resumeDefaultAnimation();
   }
 
   @Override

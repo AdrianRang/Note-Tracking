@@ -32,10 +32,13 @@ public class PickUpPiece extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    if (this.rollers.hasPiece()) {
+      this.leds.blinkLeds("#00ff00");
+      LimelightLED.blinkLeds(Constants.Vision.kLimelightName);
+      
+    }
     this.lifter.setLifterAngle(Constants.Intake.Physical.kShooterAngle);
     this.rollers.stop();
-    this.leds.blinkLeds("#00ff00");
-    LimelightLED.blinkLeds(Constants.Vision.kLimelightName);
   }
 
   @Override

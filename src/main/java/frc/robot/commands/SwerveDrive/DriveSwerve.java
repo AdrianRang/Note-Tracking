@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.SwerveDrive;
 
 public class DriveSwerve extends Command {
@@ -32,6 +33,8 @@ public class DriveSwerve extends Command {
 
   double targetHeading = 0;
   boolean stoppedRotating = false;
+
+  int lastPipeline = 0;
   
   public DriveSwerve(SwerveDrive swerveDrive, Supplier<Double> xSpeed, Supplier<Double> ySpeed, Supplier<Double> rotSpeed, Supplier<Boolean> fieldRelative, Supplier<Boolean> trackingSpeaker) {
     this.swerveDrive = swerveDrive;
@@ -44,7 +47,13 @@ public class DriveSwerve extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if (trackingSpeaker.get()) {
+      this.lastPipeline = (int)LimelightHelpers.getCurrentPipelineIndex(Constants.Vision.kLimelightName);
+      if (Constants.SwerveDrive.kActiveTrackUseAprilTags) LimelightHelpers.setPipelineIndex(Constants.Vision.kLimelightName, Constants.Vision.kActiveTrackPipeline);
+      else LimelightHelpers.setPipelineIndex(Constants.Vision.kLimelightName, Constants.Vision.kOdometryPipeline);
+    }
+  }
 
   @Override
   public void execute() {
@@ -53,29 +62,23 @@ public class DriveSwerve extends Command {
     double rot;
 
     if (trackingSpeaker.get()) {
-      boolean isBlueAlliance = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
-      Rotation2d targetAngle = Rotation2d.fromRadians(Math.atan2(
-        (isBlueAlliance ? Constants.Field.kBlueSpeakerPoseMeters.getY() : Constants.Field.kRedSpeakerPoseMeters.getY()) - swerveDrive.getPose().getTranslation().getY(),
-        (isBlueAlliance ? Constants.Field.kBlueSpeakerPoseMeters.getX() : Constants.Field.kRedSpeakerPoseMeters.getX()) - swerveDrive.getPose().getTranslation().getX()
-      ) + Math.PI).rotateBy(Constants.Shooter.kRobotAngle);
-      rot = rotController.calculate(swerveDrive.getHeading().getDegrees(), targetAngle.getDegrees());
+      if (Constants.SwerveDrive.kActiveTrackUseAprilTags) {
+        rot = rotController.calculate(LimelightHelpers.getTX(Constants.Vision.kLimelightName), 0);
+      } else {
+        boolean isBlueAlliance = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
+        Rotation2d targetAngle = Rotation2d.fromRadians(Math.atan2(
+          (isBlueAlliance ? Constants.Field.kBlueSpeakerPoseMeters.getY() : Constants.Field.kRedSpeakerPoseMeters.getY()) - swerveDrive.getPose().getTranslation().getY(),
+          (isBlueAlliance ? Constants.Field.kBlueSpeakerPoseMeters.getX() : Constants.Field.kRedSpeakerPoseMeters.getX()) - swerveDrive.getPose().getTranslation().getX()
+        ) + Math.PI).rotateBy(Constants.Shooter.kRobotAngle);
+        rot = rotController.calculate(swerveDrive.getHeading().getDegrees(), targetAngle.getDegrees());
+      }
     } else {
       rot = rotSpeed.get();
-      if (rot < Constants.SwerveDrive.kJoystickDeadband) {
-        if (!stoppedRotating) {
-          targetHeading = swerveDrive.getHeading().getDegrees();
-          stoppedRotating = true;
-        }
-        rot = headingController.calculate(swerveDrive.getHeading().getDegrees(), targetHeading);
-      } else {
-        stoppedRotating = false;
-      }
     }
 
     x = Math.abs(x) < Constants.SwerveDrive.kJoystickDeadband ? 0 : x;
     y = Math.abs(y) < Constants.SwerveDrive.kJoystickDeadband ? 0 : y;
-    // Rotation deadband is applied above as heading controller is appliad if no deadband
-    // rot = Math.abs(rot) < Constants.SwerveDrive.kJoystickDeadband ? 0 : rot;
+    rot = Math.abs(rot) < Constants.SwerveDrive.kJoystickDeadband ? 0 : rot;
     
     x = xLimiter.calculate(x);
     y = yLimiter.calculate(y);
@@ -91,6 +94,7 @@ public class DriveSwerve extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    LimelightHelpers.setPipelineIndex(Constants.Vision.kLimelightName, lastPipeline);
     swerveDrive.stop();
   }
 

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeRollers;
 import frc.robot.subsystems.Shooter;
 
@@ -22,19 +23,20 @@ public class BasicShoot extends Command {
   public void initialize() {
     timer.reset();
     timer.start();
+    RobotContainer.shooterLeds.setAnimation(Constants.HyperLEDs.kShootAnimation::provider);
   }
 
   @Override
   public void execute() {
     this.m_shooter.set(0.2);
     this.rollers.giveToShooter();
-    
   }
 
   @Override
   public void end(boolean interrupted) {
     this.m_shooter.stop();
     this.rollers.stop();
+    RobotContainer.shooterLeds.resumeDefaultAnimation();
   }
 
   @Override
