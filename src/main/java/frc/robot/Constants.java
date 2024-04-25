@@ -21,6 +21,8 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import lib.team3526.constants.CTRECANDevice;
 import lib.team3526.constants.PIDFConstants;
 import lib.team3526.constants.SwerveModuleOptions;
@@ -29,9 +31,7 @@ import lib.team3526.led.animations.PhaseAnimation;
 import lib.team3526.led.animations.ShootingStarAnimation;
 import lib.team3526.led.framework.HyperLEDAnimation;
 import lib.team3526.utils.SwerveChassis;
-
 import static edu.wpi.first.units.Units.*;
-
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.pathplanner.lib.util.PIDConstants;
 
@@ -64,7 +64,17 @@ public final class Constants {
         //! Physical model of the robot
         public static final class PhysicalModel {
             //! MAX DISPLACEMENT SPEED (and acceleration)
-            public static final Measure<Velocity<Distance>> kMaxSpeed = MetersPerSecond.of(4);
+            public static final SendableChooser<Measure<Velocity<Distance>>> kMaxSpeedChooser = new SendableChooser<>();
+            static {
+                kMaxSpeedChooser.setDefaultOption("0.5 m/s", MetersPerSecond.of(0.5));
+                kMaxSpeedChooser.addOption("1 m/s", MetersPerSecond.of(1));
+                kMaxSpeedChooser.addOption("2 m/s", MetersPerSecond.of(2));
+                kMaxSpeedChooser.addOption("3 m/s", MetersPerSecond.of(3));
+                kMaxSpeedChooser.addOption("4 m/s", MetersPerSecond.of(4));
+                kMaxSpeedChooser.onChange((option) -> {kMaxSpeed = option;});
+                SmartDashboard.putData("SwerveDrive/MaxSpeed", kMaxSpeedChooser);
+            }
+            public static Measure<Velocity<Distance>> kMaxSpeed = MetersPerSecond.of(4);
             public static final double kMaxAcceleration = 3;
 
             //! MAX ROTATIONAL SPEED (and acceleration)
