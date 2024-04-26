@@ -21,7 +21,7 @@ public class Shooter extends SubsystemBase {
     public Shooter() {
         this.leftMotor = new LazyCANSparkMax(Constants.Shooter.kLeftShooterMotorID, MotorType.kBrushless);
         this.rightMotor = new LazyCANSparkMax(Constants.Shooter.kRightShooterMotorID, MotorType.kBrushless);
-            this.rightMotor.setInverted(true);
+        this.rightMotor.setInverted(true);
 
         this.leftEncoder = leftMotor.getEncoder();
         this.rightEncoder = rightMotor.getEncoder();
@@ -46,7 +46,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void shootSpeaker() {
-        this.set(Constants.Shooter.kShooterSpeakerSpeed);
+        this.set(Constants.Shooter.kShooterSpeakerLeftSpeed, Constants.Shooter.kShooterSpeakerRightSpeed);
     }
 
     public double getLeftMotorRpm() {

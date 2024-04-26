@@ -240,7 +240,9 @@ public final class Constants {
         public static final double kShooterGearRatio = 1.0 / 1.0;
 
         // Shooter speeds
-        public static final double kShooterSpeakerSpeed = 1;
+        public static final double kShooterMaxSpeed = 1;
+        public static final double kShooterSpeakerLeftSpeed = kShooterMaxSpeed;
+        public static final double kShooterSpeakerRightSpeed = kShooterMaxSpeed * 0.95;
 
         // Shooter motor time
         public static final double kMaxShootTime = 4;

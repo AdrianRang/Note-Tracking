@@ -147,7 +147,7 @@ public class RobotContainer {
         () -> -this.m_driverControllerCustom.getLeftX(),
         () -> -this.m_driverControllerCustom.getRightX(),
         () -> true,
-        () -> this.m_driverControllerCustom.rightTrigger().getAsBoolean()
+        () -> false
       )
     );
 
