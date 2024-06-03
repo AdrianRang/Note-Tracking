@@ -7,7 +7,7 @@ import com.ctre.phoenix.led.StrobeAnimation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import lib.team3526.constants.CTRECANDevice;
-import lib.team3526.led.LEDStrip;
+import lib.team3526.led.CANdleLEDStrip;
 
 public class LedsSubsystem extends SubsystemBase {
     private final CANdle leds;
@@ -44,7 +44,7 @@ public class LedsSubsystem extends SubsystemBase {
      * @param strip The LEDStrip object representing the segment of LEDs to set
      * @param hex The hex color to set the LEDs to in String format
      */
-    public void setLedSegment(LEDStrip strip, String hex) {
+    public void setLedSegment(CANdleLEDStrip strip, String hex) {
         int[] rgb = hexToRGB(hex);
         leds.setLEDs(rgb[0], rgb[1], rgb[2], 255, strip.getInitialIndex(), strip.getLength());
     }
@@ -56,7 +56,7 @@ public class LedsSubsystem extends SubsystemBase {
      * @param g The green value to set the LEDs to
      * @param b The blue value to set the LEDs to
      */
-    public void setLedSegment(LEDStrip strip, int r, int g, int b) {
+    public void setLedSegment(CANdleLEDStrip strip, int r, int g, int b) {
         leds.setLEDs(r, g, b, 255, strip.getInitialIndex(), strip.getLength());
     }
 
@@ -85,7 +85,7 @@ public class LedsSubsystem extends SubsystemBase {
      * @param hex The hex color to blink the LEDs with in String format
      * @param speed The speed of the blink
      */
-    public void blinkLedSegment(LEDStrip strip, String hex, int speed) {
+    public void blinkLedSegment(CANdleLEDStrip strip, String hex, int speed) {
         int[] rgb = hexToRGB(hex);
         leds.animate(new StrobeAnimation(rgb[0], rgb[1], rgb[2], 255, speed, strip.getLength(), strip.getInitialIndex()));
     }
@@ -98,7 +98,7 @@ public class LedsSubsystem extends SubsystemBase {
      * @param b The blue value to blink the LEDs with
      * @param speed The speed of the blink
      */
-    public void blinkLedSegment(LEDStrip strip, int r, int g, int b, int speed) {
+    public void blinkLedSegment(CANdleLEDStrip strip, int r, int g, int b, int speed) {
         leds.animate(new StrobeAnimation(r, g, b, 255, speed, strip.getLength(), strip.getInitialIndex()));
     }
 

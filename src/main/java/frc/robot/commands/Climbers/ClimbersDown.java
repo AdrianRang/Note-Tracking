@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
 
 public class ClimbersDown extends Command {
-  
   private final Climber leftClimber;
   private final Climber rightClimber;
 

@@ -1,6 +1,6 @@
 package lib.team3526.led;
 
-public class LEDStrip {
+public class CANdleLEDStrip {
     private final int initialIndex;
     private final int finalIndex;
     private final int length;
@@ -10,9 +10,9 @@ public class LEDStrip {
      * @param initialIndex the first index of the LED strip
      * @param finalIndex the last index of the LED strip
      */
-    public LEDStrip(int initialIndex, int finalIndex) {
-        this.initialIndex = initialIndex+8;
-        this.finalIndex = finalIndex+8;
+    public CANdleLEDStrip(int initialIndex, int finalIndex) {
+        this.initialIndex = initialIndex + 8;
+        this.finalIndex = finalIndex + 8;
         this.length = finalIndex - initialIndex + 1;
     }
 

@@ -20,8 +20,6 @@ public class Climber extends SubsystemBase {
         this.name = name;
         this.climberMotor = new LazyCANSparkMax(motorID, MotorType.kBrushless);
         this.climberEncoder = this.climberMotor.getEncoder();
-        //this.climberEncoder.setPositionConversionFactor(Constants.Climber.kClimber_RotationToCentimeters);
-        //this.climberEncoder.setInverted(true);
     }
 
     public void set(double speed) {

@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import lib.team3526.constants.CTRECANDevice;
 import lib.team3526.constants.PIDFConstants;
 import lib.team3526.constants.SwerveModuleOptions;
-import lib.team3526.led.LEDStrip;
+import lib.team3526.led.CANdleLEDStrip;
 import lib.team3526.led.animations.PhaseAnimation;
 import lib.team3526.led.animations.ShootingStarAnimation;
 import lib.team3526.led.framework.HyperLEDAnimation;
@@ -282,8 +282,8 @@ public final class Constants {
         public static final LEDStripType kLEDStripType = LEDStripType.GRB;
         public static final double kLEDBrightness = 0.25;
 
-        public static final LEDStrip kLeftClimber = new LEDStrip(0, 9);
-        public static final LEDStrip kRightClimber = new LEDStrip(9, 18);
+        public static final CANdleLEDStrip kLeftClimber = new CANdleLEDStrip(0, 9);
+        public static final CANdleLEDStrip kRightClimber = new CANdleLEDStrip(9, 18);
     }
 
     public static final class HyperLEDs {
