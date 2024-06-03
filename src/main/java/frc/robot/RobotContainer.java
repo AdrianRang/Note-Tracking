@@ -42,6 +42,7 @@ import lib.team3526.led.framework.HyperAddressableLEDStrip;
 public class RobotContainer {
   // * Controller
   private final CustomController m_driverControllerCustom;
+  private final CustomController m_operatorControllerCustom;
 
   // *  Swerve Modules
   private final SwerveModule m_frontLeft;
@@ -77,6 +78,7 @@ public class RobotContainer {
   
   public RobotContainer() {
     this.m_driverControllerCustom = new CustomController(0, CustomController.CustomControllerType.XBOX, CustomController.CustomJoystickCurve.LINEAR);
+    this.m_operatorControllerCustom = new CustomController(1, CustomController.CustomControllerType.XBOX, CustomController.CustomJoystickCurve.LINEAR);
 
     this.m_frontLeft = new SwerveModule(Constants.SwerveDrive.SwerveModules.kFrontLeftOptions);
     this.m_frontRight = new SwerveModule(Constants.SwerveDrive.SwerveModules.kFrontRightOptions);
@@ -135,40 +137,45 @@ public class RobotContainer {
     this.autonomousChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Autonomous", this.autonomousChooser);
 
-    configureBindings();
+    configureBindings(m_driverControllerCustom, true, false);
+    configureBindings(m_operatorControllerCustom, false, true);
 
     m_swerveDrive.resetTurningEncoders();
   }
 
-  private void configureBindings() {
-    this.m_swerveDrive.setDefaultCommand(new DriveSwerve(
-        m_swerveDrive,
-        () -> -this.m_driverControllerCustom.getLeftY(),
-        () -> -this.m_driverControllerCustom.getLeftX(),
-        () -> -this.m_driverControllerCustom.getRightX(),
-        () -> true,
-        () -> false
-      )
-    );
-
-    this.m_driverControllerCustom.bottomButton().toggleOnTrue(new PickUpPiece(this.m_rollers, this.m_intake, this.m_leds));
+  private void configureBindings(CustomController controller, boolean bindDrivetrain, boolean bindSubsystems) {
+    if (bindDrivetrain) {
+      this.m_swerveDrive.setDefaultCommand(new DriveSwerve(
+          m_swerveDrive,
+          () -> -controller.getLeftY(),
+          () -> -controller.getLeftX(),
+          () -> -controller.getRightX(),
+          () -> true,
+          () -> false
+        )
+      );
+    }
+    
+    controller.rightStickButton().onTrue(new InstantCommand(() -> this.m_swerveDrive.zeroHeading()));
 
     // Set pipeline to apriltags high framerate
-    this.m_driverControllerCustom.rightTrigger().whileTrue(new SpinShooter(this.m_shooter, this.m_leds));
-    this.m_driverControllerCustom.rightTrigger().onFalse(new Shoot(this.m_shooter, this.m_rollers, this.m_leds));
-
-    this.m_driverControllerCustom.leftTrigger().whileTrue(new IntakeOut(this.m_rollers));
-
-    this.m_driverControllerCustom.povLeft().whileTrue(new LifterAmp(m_intake));
-    this.m_driverControllerCustom.povLeft().onFalse(new ShootAmp(this.m_rollers, this.m_intake, this.m_leds));
-
-    this.m_driverControllerCustom.rightBumper().whileTrue(new LifterFloor(this.m_intake));
-    this.m_driverControllerCustom.leftBumper().whileTrue(new LifterShooter(this.m_intake));
-
-    this.m_driverControllerCustom.povUp().whileTrue(new ClimbersUp(this.m_leftClimber, this.m_rightClimber));
-    this.m_driverControllerCustom.povDown().whileTrue(new ClimbersDown(this.m_leftClimber, this.m_rightClimber));
-
-    this.m_driverControllerCustom.rightStickButton().onTrue(new InstantCommand(() -> this.m_swerveDrive.zeroHeading()));
+    if (bindSubsystems) {
+      controller.rightTrigger().whileTrue(new SpinShooter(this.m_shooter, this.m_leds));
+      controller.rightTrigger().onFalse(new Shoot(this.m_shooter, this.m_rollers, this.m_leds));
+  
+      controller.leftTrigger().whileTrue(new IntakeOut(this.m_rollers));
+  
+      controller.povLeft().whileTrue(new LifterAmp(m_intake));
+      controller.povLeft().onFalse(new ShootAmp(this.m_rollers, this.m_intake, this.m_leds));
+  
+      controller.rightBumper().whileTrue(new LifterFloor(this.m_intake));
+      controller.leftBumper().whileTrue(new LifterShooter(this.m_intake));
+  
+      controller.povUp().whileTrue(new ClimbersUp(this.m_leftClimber, this.m_rightClimber));
+      controller.povDown().whileTrue(new ClimbersDown(this.m_leftClimber, this.m_rightClimber));
+  
+      controller.bottomButton().toggleOnTrue(new PickUpPiece(this.m_rollers, this.m_intake, this.m_leds));
+    }
   }
 
   public Command getAutonomousCommand() {

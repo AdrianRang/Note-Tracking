@@ -1,0 +1,21 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/ActiveTrackPID": "PIDController",
+      "/SmartDashboard/Autonomous": "String Chooser",
+      "/SmartDashboard/HeadingControllerPID": "PIDController",
+      "/SmartDashboard/ProfiledPIDController[1]": "ProfiledPIDController",
+      "/SmartDashboard/Reset Climbers": "Command",
+      "/SmartDashboard/ResetPose": "Command",
+      "/SmartDashboard/ResetTurningEncoders": "Command",
+      "/SmartDashboard/SetVisionPose": "Command",
+      "/SmartDashboard/SwerveDrive/Field": "Field2d",
+      "/SmartDashboard/SwerveDrive/MaxSpeed": "String Chooser",
+      "/SmartDashboard/ZeroHeading": "Command"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}
