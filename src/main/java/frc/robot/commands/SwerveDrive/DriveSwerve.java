@@ -8,7 +8,6 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -66,11 +65,11 @@ public class DriveSwerve extends Command {
         rot = rotController.calculate(LimelightHelpers.getTX(Constants.Vision.kLimelightName), 0);
       } else {
         boolean isBlueAlliance = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
-        Rotation2d targetAngle = Rotation2d.fromRadians(Math.atan2(
-          (isBlueAlliance ? Constants.Field.kBlueSpeakerPoseMeters.getY() : Constants.Field.kRedSpeakerPoseMeters.getY()) - swerveDrive.getPose().getTranslation().getY(),
-          (isBlueAlliance ? Constants.Field.kBlueSpeakerPoseMeters.getX() : Constants.Field.kRedSpeakerPoseMeters.getX()) - swerveDrive.getPose().getTranslation().getX()
-        ) + Math.PI).rotateBy(Constants.Shooter.kRobotAngle);
-        rot = rotController.calculate(swerveDrive.getHeading().getDegrees(), targetAngle.getDegrees());
+        // Rotation2d targetAngle = Rotation2d.fromRadians(Math.atan2(
+        //   (isBlueAlliance ? Constants.Field.kBlueSpeakerPoseMeters.getY() : Constants.Field.kRedSpeakerPoseMeters.getY()) - swerveDrive.getPose().getTranslation().getY(),
+        //   (isBlueAlliance ? Constants.Field.kBlueSpeakerPoseMeters.getX() : Constants.Field.kRedSpeakerPoseMeters.getX()) - swerveDrive.getPose().getTranslation().getX()
+        // ) + Math.PI).rotateBy(Constants.Shooter.kRobotAngle);
+        // rot = rotController.calculate(swerveDrive.getHeading().getDegrees(), targetAngle.getDegrees());
       }
     } else {
       rot = rotSpeed.get();
